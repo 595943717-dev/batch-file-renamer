@@ -2,7 +2,7 @@ import os
 import argparse
 
 
-def rename_files(folder, prefix="", suffix="", replace_text=None):
+def rename_files(folder, prefix="", suffix="", replace_text=None, dry_run=False):
     if not os.path.isdir(folder):
         print(f"Folder not found: {folder}")
         return
@@ -33,8 +33,11 @@ def rename_files(folder, prefix="", suffix="", replace_text=None):
         new_filename = f"{index:03d}_{new_name}{ext}"
         new_path = os.path.join(folder, new_filename)
 
-        os.rename(old_path, new_path)
-        print(f"Renamed: {filename} -> {new_filename}")
+        if dry_run:
+            print(f"[DRY RUN] {filename} -> {new_filename}")
+        else:
+            os.rename(old_path, new_path)
+            print(f"Renamed: {filename} -> {new_filename}")
 
 
 def main():
@@ -48,9 +51,20 @@ def main():
         metavar=("OLD", "NEW"),
         help="Replace text in filename"
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Preview changes without renaming files"
+    )
 
     args = parser.parse_args()
-    rename_files(args.folder, args.prefix, args.suffix, args.replace)
+    rename_files(
+        args.folder,
+        args.prefix,
+        args.suffix,
+        args.replace,
+        args.dry_run
+    )
 
 
 if __name__ == "__main__":
