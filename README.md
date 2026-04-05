@@ -23,3 +23,5 @@ A simple Python CLI tool for batch renaming files in a folder.
 
 ```bash
 python renamer.py ./test_files --prefix img_
+python renamer.py ./test_files --suffix _backup
+python renamer.py ./test_files --replace old new
